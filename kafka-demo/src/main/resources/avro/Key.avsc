@@ -1,0 +1,12 @@
+{
+  "type": "record",
+  "namespace": "com.example.kafka.avro",
+  "name": "Key",
+  "fields": [
+    {
+      "name": "key",
+      "type": "string",
+      "doc": "Random key value"
+    }
+  ]
+}

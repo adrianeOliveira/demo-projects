@@ -1,0 +1,32 @@
+spring:
+  cloud:
+    stream:
+      default:
+        producer:
+          use-native-encoding: true
+        consumer:
+          use-native-encoding: true
+
+      bindings:
+       demo-avro-topic-input:
+          destination: demo-avro-topic
+          group: demo-group
+       demo-topic-input:
+          destination: demo-topic
+          group: demo-group
+      kafka:
+        binder:
+          configuration:
+            value:
+              serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+            key:
+              serializer: org.apache.kafka.common.serialization.KafkaAvroSerializer
+  kafka:
+    bootstrap-servers: localhost:9092
+    properties:
+      schema:
+        registry:
+          url: http://localhost:8081
+      specific:
+        avro:
+          reader: true
