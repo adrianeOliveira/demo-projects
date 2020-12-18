@@ -1,0 +1,11 @@
+pipeline {
+    agent { docker { image 'maven:3-jdk-12' } }
+    stages {
+        stage('build') {
+            steps {
+                sh 'java -version'
+                sh 'mvn clean install'
+            }
+        }
+    }
+}
