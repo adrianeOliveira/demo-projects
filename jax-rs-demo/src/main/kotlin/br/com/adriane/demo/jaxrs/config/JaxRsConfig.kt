@@ -1,16 +1,17 @@
-package br.com.adriane.demo.jaxrs
+package br.com.adriane.demo.jaxrs.config
 
+import br.com.adriane.demo.jaxrs.rest.resource.ContactResource
 import org.glassfish.jersey.server.ResourceConfig
 import org.springframework.stereotype.Component
 
 @Component
-class HelloConfig: ResourceConfig() {
+class JaxRsConfig: ResourceConfig() {
 
     init {
         registerEndpoints()
     }
 
     private fun registerEndpoints() {
-        register(HelloResource::class.java)
+        register(ContactResource::class.java)
     }
 }
