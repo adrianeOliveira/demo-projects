@@ -1,0 +1,1 @@
+insert into contact(id, name, email) values(1, 'Adriane', 'rodrigues.adriane@outlook.com');

@@ -12,7 +12,7 @@ import javax.ws.rs.Produces
 import javax.ws.rs.core.MediaType
 
 @Component
-@Path("/contact")
+@Path("/contacts")
 class ContactResource(
         val contactService: ContactService
 ) {
