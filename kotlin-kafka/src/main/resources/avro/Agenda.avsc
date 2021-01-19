@@ -1,0 +1,25 @@
+{
+  "type": "record",
+  "name": "Contato",
+  "namespace": "br.com.adriane.demo.avro",
+  "fields": [
+    {
+      "name": "id",
+      "type":  ["null","int"],
+      "doc": "Id do contato",
+      "default": null
+    },
+    {
+      "name": "nome",
+      "type":  ["null","string"],
+      "doc": "nome do contato",
+      "default": null
+    },
+    {
+      "name": "email",
+      "type":  ["null","string"],
+      "doc": "email do contato",
+      "default": null
+    }
+  ]
+}
