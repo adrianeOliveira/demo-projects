@@ -1,14 +1,14 @@
 # kotlin-kafka
 
-##Disparo de mensagens
+## Disparo de mensagens
 
-###Produtor Kafka
+### Produtor Kafka
 Por padrão a aplicação publica mensagens no tópico _topic-kotlin-app_ via api restfull
 
-###Consumidor Kafka
+### Consumidor Kafka
 O Consumidor padrão da aplicação se conecta no broker con o groupid *kotlin-group*
 
-###API RESTful
+### API RESTful
 Para disparo das mensagens:
 ```sh
 curl -X GET localhost:8080/kafka
