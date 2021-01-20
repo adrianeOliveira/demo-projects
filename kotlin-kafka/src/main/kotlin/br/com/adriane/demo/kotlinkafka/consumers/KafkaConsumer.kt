@@ -1,4 +1,4 @@
-package br.com.adriane.demo.kotlinkafka
+package br.com.adriane.demo.kotlinkafka.consumers
 
 import br.com.adriane.demo.avro.Contato
 import org.slf4j.LoggerFactory

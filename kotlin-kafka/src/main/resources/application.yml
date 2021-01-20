@@ -8,6 +8,8 @@ spring:
       specific:
         avro:
           reader: true
+    template:
+      default-topic: topic-kotlin-app
     producer:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
