@@ -10,17 +10,17 @@ import org.springframework.web.bind.annotation.RequestMapping
 @RestController
 @RequestMapping("/kafka")
 class KafkaController(
-//    val kafkaTemplate: KafkaTemplate<String,String>,
+    val kafkaTemplate: KafkaTemplate<String,String>,
     val kafkaTemplateContato: KafkaTemplate<String, Contato>
 
 ) {
     private val log = LoggerFactory.getLogger(KafkaController::class.java)
 
-//    @GetMapping
-//    fun triggerMessageToKaf() {
-//        log.info("sending message to kafka")
-//        kafkaTemplate.send("topic-kotlin-app", "key", "Hello Kafka from Kotlin")
-//    }
+    @GetMapping
+    fun triggerMessageToKaf() {
+        log.info("sending message to kafka")
+        kafkaTemplate.send("topic-kotlin-app", "key", "Hello Kafka from Kotlin")
+    }
 
     @GetMapping("/contato")
     fun triggerAvroMessage() {
