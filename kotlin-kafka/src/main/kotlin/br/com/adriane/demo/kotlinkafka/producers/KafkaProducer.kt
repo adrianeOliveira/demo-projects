@@ -13,7 +13,8 @@ class KafkaProducer(
     private val log = LoggerFactory.getLogger(KafkaProducer::class.java)
 
     fun produce(message : String) {
-        kafkaTemplate.sendDefault(UUID.randomUUID().toString(), "Hello Kafka from Kotlin")
+        log.info("Sending message to topic ${kafkaTemplate.defaultTopic}")
+        kafkaTemplate.sendDefault(UUID.randomUUID().toString(), message)
     }
 }
 
@@ -24,6 +25,7 @@ class AvroProducer(
     private val log = LoggerFactory.getLogger(AvroProducer::class.java)
 
     fun produce(contato: Contato) {
+        log.info("Sending message contato = $contato")
         kafkaTemplate.send("topic-kotlin-avro", UUID.randomUUID().toString(), contato)
     }
 }

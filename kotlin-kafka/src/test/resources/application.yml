@@ -1,0 +1,6 @@
+spring:
+  kafka:
+    consumer:
+      auto-offset-reset: earliest
+    template:
+      default-topic: topic-kotlin-app
