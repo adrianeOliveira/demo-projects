@@ -1,1 +1,0 @@
-insert into contact(full_name, phone, email) values ('Adriane Rodrigues', '123456789', 'rodrigues.adriane@outlook.com'),('Ariane Rodrigues', '987654321', 'ariane@email.com')
