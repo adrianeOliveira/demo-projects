@@ -2,11 +2,15 @@ package br.com.adriane.demo.ddddemo.infrastructure.repository
 
 import br.com.adriane.demo.ddddemo.domain.CustomerOrder
 import br.com.adriane.demo.ddddemo.domain.CustomerOrderRepository
+import br.com.adriane.demo.ddddemo.domain.OrderItem
+import br.com.adriane.demo.ddddemo.infrastructure.entities.CustomerOrderEntity
+import br.com.adriane.demo.ddddemo.infrastructure.entities.OrderItemEntity
 import org.springframework.data.repository.findByIdOrNull
 
 class CustomerOrderRepositoryImpl(
     private val repository: JpaCustomerOrderRepository
 ) : CustomerOrderRepository {
+
     override fun findCustomerOrder(id: Int): CustomerOrder? {
         val orderEntity = repository.findByIdOrNull(id) ?: return null
 
@@ -14,11 +18,36 @@ class CustomerOrderRepositoryImpl(
         orderEntity.orderItems.forEach {
             customerOrder.addNewProduct(it.productId, it.quantity, it.unitPrice)
         }
-
+        customerOrder.calculateTotalPrice()
         return customerOrder
     }
 
-    override fun saveCustomerOrder(customerOrder: CustomerOrder) {
-        TODO("Not yet implemented")
+    override fun saveCustomerOrder(orderId: Int, customerOrder: CustomerOrder) {
+        customerOrder.calculateTotalPrice()
+        val orderEntity = CustomerOrderEntity(
+            orderId,
+            customerOrder.address(),
+            customerOrder.totalPrice,
+            customerOrder.paymentMethod(),
+            mapDomainItemsToEntity(orderId, customerOrder.orderItems()),
+        )
+        repository.save(orderEntity)
+    }
+
+    private fun mapDomainItemsToEntity(orderId: Int, domainItems: MutableList<OrderItem>) :
+            MutableList<OrderItemEntity> {
+        val resultList = mutableListOf<OrderItemEntity>()
+
+        domainItems.forEach {
+            resultList.add(OrderItemEntity(
+                0,
+                it.productId,
+                it.quantity,
+                it.unitPrice,
+                orderId
+            ))
+        }
+
+        return resultList
     }
 }

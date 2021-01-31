@@ -16,7 +16,7 @@ class CustomerOrderCommandHandlers(
             throw IllegalArgumentException("Pedido não existe, orderId=$orderId")
 
         customerOrder.addNewProduct(productId, quantity, unitPrice)
-        customerOrderRepository.saveCustomerOrder(customerOrder)
+        customerOrderRepository.saveCustomerOrder(orderId, customerOrder)
         log.info("method=addNewProduct, info=produto $productId adicionado no pedido $orderId")
     }
 }

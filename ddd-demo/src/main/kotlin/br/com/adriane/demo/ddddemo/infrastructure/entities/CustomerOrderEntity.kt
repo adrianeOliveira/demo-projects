@@ -1,6 +1,7 @@
 package br.com.adriane.demo.ddddemo.infrastructure.entities
 
 import javax.persistence.Entity
+import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
@@ -18,19 +19,19 @@ data class CustomerOrderEntity(
     val address: String,
     val totalPrice: Double,
     val paymentMethod: String,
-    @OneToMany(mappedBy = "customerOrderId")
-    val orderItems: MutableList<OrderItemEntity>
+    @OneToMany(mappedBy = "customerOrderId", fetch = FetchType.LAZY)
+    var orderItems: MutableList<OrderItemEntity>
 )
 
 @Entity
 @Table(name = "order_item")
 data class OrderItemEntity(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val orderItemId: Int,
-    val productId: Int,
-    val quantity: Int,
-    val unitPrice: Double,
-    @ManyToOne(targetEntity = CustomerOrderEntity::class)
+    var orderItemId: Int,
+    var productId: Int,
+    var quantity: Int,
+    var unitPrice: Double,
+    @ManyToOne(targetEntity = CustomerOrderEntity::class, fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_order_id")
-    val customerOrderId: Int
+    var customerOrderId: Int
 )

@@ -4,5 +4,5 @@ interface CustomerOrderRepository {
 
     fun findCustomerOrder(id: Int): CustomerOrder?
 
-    fun saveCustomerOrder(customerOrder: CustomerOrder)
+    fun saveCustomerOrder(orderId: Int, customerOrder: CustomerOrder)
 }
