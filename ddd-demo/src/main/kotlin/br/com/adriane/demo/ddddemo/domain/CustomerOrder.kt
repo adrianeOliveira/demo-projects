@@ -1,13 +1,9 @@
 package br.com.adriane.demo.ddddemo.domain
 
-import org.slf4j.LoggerFactory
-
 class CustomerOrder(
     private val paymentMethod: String,
     private val address: String
 ) {
-    private val log = LoggerFactory.getLogger(CustomerOrder::class.java)
-
     private val orderItems = mutableListOf<OrderItem>()
 
     var totalPrice: Double = 0.0
@@ -23,7 +19,6 @@ class CustomerOrder(
             quantity,
             unitPrice
         ))
-        log.info("method=addNewProduct, newItem=${orderItems.last()}")
     }
 
     fun calculateTotalPrice() {

@@ -22,7 +22,7 @@ class DddDemoApplicationTests {
 		customerOrderHandler.addNewProduct(1, 362, 1, 34.80)
 
 		val customerOrder = customerRepository.findCustomerOrder(1)
-		val orderItem = customerOrder?.orderItems()?.last()
+		val orderItem = customerOrder?.orderItems()?.find { it.productId == 362 }
 
 		assertNotNull(customerOrder)
 		assertNotNull(orderItem)
