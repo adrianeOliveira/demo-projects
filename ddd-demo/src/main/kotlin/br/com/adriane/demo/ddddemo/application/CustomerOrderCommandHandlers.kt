@@ -1,5 +1,6 @@
 package br.com.adriane.demo.ddddemo.application
 
+import br.com.adriane.demo.ddddemo.domain.CustomerOrder
 import br.com.adriane.demo.ddddemo.domain.CustomerOrderRepository
 import org.slf4j.LoggerFactory
 
@@ -16,7 +17,20 @@ class CustomerOrderCommandHandlers(
             throw IllegalArgumentException("Pedido não existe, orderId=$orderId")
 
         customerOrder.addNewProduct(productId, quantity, unitPrice)
-        customerOrderRepository.saveCustomerOrder(orderId, customerOrder)
+
+        customerOrderRepository.updateCustomerOrder(orderId, customerOrder)
+
         log.info("method=addNewProduct, info=produto $productId adicionado no pedido $orderId")
+    }
+
+    fun createNewCustomerOrder() : Int {
+        log.info("m=createNewCustomerOrder, info=criação de nova ordem")
+
+        val customerOrderId = customerOrderRepository.createCustomerOrder(
+            CustomerOrder("", "")
+        )
+
+        log.info("m=createNewCustomerOrder, info=orderId=$customerOrderId")
+        return customerOrderId
     }
 }
