@@ -2,7 +2,7 @@ package br.com.adriane.demo.ddddemo
 
 import br.com.adriane.demo.ddddemo.application.CustomerOrderCommandHandlers
 import br.com.adriane.demo.ddddemo.domain.CustomerOrderRepository
-import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,11 +24,10 @@ class DddDemoApplicationTests {
 		val customerOrder = customerRepository.findCustomerOrder(1)
 		val orderItem = customerOrder?.orderItems()?.find { it.productId == 362 }
 
-		assertNotNull(customerOrder)
 		assertNotNull(orderItem)
-		Assertions.assertEquals(orderItem?.productId, 362)
-		Assertions.assertEquals(orderItem?.quantity, 1)
-		Assertions.assertEquals(orderItem?.unitPrice, 34.8)
+		assertEquals(orderItem?.productId, 362)
+		assertEquals(orderItem?.quantity, 1)
+		assertEquals(orderItem?.unitPrice, 34.8)
 	}
 
 }

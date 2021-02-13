@@ -34,12 +34,13 @@ class CustomerOrderRepositoryImpl(
             customerOrder.address(),
             customerOrder.totalPrice,
             customerOrder.paymentMethod(),
-            mapDomainItemsToEntity(orderId, customerOrder.orderItems()),
+            mutableListOf()
         )
+        orderEntity.orderItems = mapDomainItemsToEntity(orderEntity, customerOrder.orderItems())
         repository.save(orderEntity)
     }
 
-    private fun mapDomainItemsToEntity(orderId: Int, domainItems: MutableList<OrderItem>) :
+    private fun mapDomainItemsToEntity(orderEntity: CustomerOrderEntity, domainItems: MutableList<OrderItem>) :
             MutableList<OrderItemEntity> {
         val resultList = mutableListOf<OrderItemEntity>()
 
@@ -49,7 +50,7 @@ class CustomerOrderRepositoryImpl(
                 it.productId,
                 it.quantity,
                 it.unitPrice,
-                orderId
+                orderEntity
             ))
         }
 

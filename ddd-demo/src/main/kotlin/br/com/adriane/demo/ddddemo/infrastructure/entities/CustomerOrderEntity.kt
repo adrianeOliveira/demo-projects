@@ -1,7 +1,7 @@
 package br.com.adriane.demo.ddddemo.infrastructure.entities
 
+import javax.persistence.CascadeType
 import javax.persistence.Entity
-import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
@@ -19,7 +19,7 @@ class CustomerOrderEntity(
     var address: String,
     var totalPrice: Double,
     var paymentMethod: String,
-    @OneToMany(mappedBy = "customerOrderId")
+    @OneToMany(mappedBy = "customerOrder", cascade = [CascadeType.ALL])
     var orderItems: MutableList<OrderItemEntity>
 )
 
@@ -31,5 +31,6 @@ class OrderItemEntity(
     var productId: Int,
     var quantity: Int,
     var unitPrice: Double,
-    var customerOrderId: Int
+    @ManyToOne @JoinColumn(name = "customer_order_id")
+    var customerOrder: CustomerOrderEntity
 )
