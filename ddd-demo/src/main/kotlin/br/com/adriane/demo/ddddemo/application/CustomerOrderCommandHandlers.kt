@@ -1,5 +1,6 @@
 package br.com.adriane.demo.ddddemo.application
 
+import br.com.adriane.demo.ddddemo.application.command.OrderAddProductCommand
 import br.com.adriane.demo.ddddemo.domain.CustomerOrder
 import br.com.adriane.demo.ddddemo.domain.CustomerOrderRepository
 import org.slf4j.LoggerFactory
@@ -10,17 +11,17 @@ class CustomerOrderCommandHandlers(
 
     private val log = LoggerFactory.getLogger(CustomerOrderCommandHandlers::class.java)
 
-    fun addNewProduct(orderId: Int, productId: Int, quantity: Int, unitPrice: Double) {
-        log.info("method=addNewProduct, orderId=$orderId, productId=$productId")
+    fun addNewProduct(command: OrderAddProductCommand) {
+        log.info("method=addNewProduct, orderId=${command.orderId}, productId=${command.productId}")
 
-        val customerOrder = customerOrderRepository.findCustomerOrder(orderId) ?:
-            throw IllegalArgumentException("Pedido não existe, orderId=$orderId")
+        val customerOrder = customerOrderRepository.findCustomerOrder(command.orderId) ?:
+            throw IllegalArgumentException("Pedido não existe, orderId=${command.orderId}")
 
-        customerOrder.addNewProduct(productId, quantity, unitPrice)
+        customerOrder.addNewProduct(command.productId, command.quantity, command.unitPrice)
 
-        customerOrderRepository.updateCustomerOrder(orderId, customerOrder)
+        customerOrderRepository.updateCustomerOrder(command.orderId, customerOrder)
 
-        log.info("method=addNewProduct, info=produto $productId adicionado no pedido $orderId")
+        log.info("method=addNewProduct, info=produto ${command.productId} adicionado no pedido ${command.orderId}")
     }
 
     fun createNewCustomerOrder() : Int {

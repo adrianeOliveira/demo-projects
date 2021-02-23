@@ -1,7 +1,8 @@
 package br.com.adriane.demo.ddddemo.infrastructure.configuration
 
-import br.com.adriane.demo.ddddemo.infrastructure.queries.CustomerOrderQuery
+import br.com.adriane.demo.ddddemo.infrastructure.service.CustomerOrderQueryService
 import br.com.adriane.demo.ddddemo.infrastructure.repository.JpaCustomerOrderRepository
+import br.com.adriane.demo.ddddemo.infrastructure.service.impl.CustomerOrderQueryServiceImpl
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -11,6 +12,8 @@ class CustomerOrderQueryConfiguration(
 ) {
 
     @Bean
-    fun customerOrderQuery() =
-        CustomerOrderQuery(repository)
+    fun customerOrderQuery() : CustomerOrderQueryService {
+        return CustomerOrderQueryServiceImpl(repository)
+    }
+
 }
