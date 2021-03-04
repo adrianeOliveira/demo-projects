@@ -18,16 +18,16 @@ class CustomerOrderMapper {
                 mapOrderItemEntityToResponse(customerOrder)
             )
 
-    private fun mapOrderItemEntityToResponse(customerOrder: CustomerOrderEntity) =
-        customerOrder.orderItems.map {
-            CustomerOrderItemResponse(
-                it.orderItemId,
-                it.productId,
-                it.quantity,
-                it.unitPrice,
-                it.customerOrder.orderId
-            )
-        }.toMutableList()
+        private fun mapOrderItemEntityToResponse(customerOrder: CustomerOrderEntity) =
+            customerOrder.orderItems.map {
+                CustomerOrderItemResponse(
+                    it.orderItemId,
+                    it.productId,
+                    it.quantity,
+                    it.unitPrice,
+                    it.customerOrder.orderId
+                )
+            }.toMutableList()
 
         fun mapDomainOrderToEntity(orderId: Int, customerOrder: CustomerOrder) =
             CustomerOrderEntity(
