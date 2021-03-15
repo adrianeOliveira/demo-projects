@@ -4,11 +4,12 @@ class Order(
     val status: Status
 ) {
     var items = mutableListOf<Item>()
-    private var totalPrice = 0.0
+    var totalPrice = 0.0
+    private set
 
-    fun addItem(productId: Int, price: Double) {
-        items.add(Item(productId, price))
-        totalPrice += price
+    fun addItem(productId: Int, price: Double, quantity: Int) {
+        items.add(Item(productId, price, quantity))
+        totalPrice += (price * quantity)
     }
 
     fun removeProduct(productId: Int) {
@@ -22,9 +23,10 @@ class Order(
     }
 }
 
-class Item(
+data class Item(
     val productId: Int,
-    val unitPrice: Double
+    val unitPrice: Double,
+    val quantity: Int
 )
 
 enum class Status {
