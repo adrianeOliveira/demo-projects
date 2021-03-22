@@ -30,6 +30,6 @@ public class StepsDefinitions {
 
     @Then("Lucy hears Sean's message")
     public void lucyHearsSeanSMessage() {
-        assertEquals(Arrays.asList(messageFromSean), lucy.getMessageHeard());
+        assertEquals(Arrays.asList(messageFromSean), lucy.getMessagesHeard());
     }
 }

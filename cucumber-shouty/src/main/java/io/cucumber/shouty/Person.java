@@ -21,7 +21,7 @@ public class Person {
         messageHeard.add(message);
     }
 
-    public List<String> getMessageHeard() {
+    public List<String> getMessagesHeard() {
         return messageHeard;
     }
 
