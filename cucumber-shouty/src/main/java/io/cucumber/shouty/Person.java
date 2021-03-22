@@ -25,6 +25,4 @@ public class Person {
         return messageHeard;
     }
 
-    public void moveTo(int location) {
-    }
 }

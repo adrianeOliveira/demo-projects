@@ -1,9 +1,9 @@
 Feature: Hear shout
 
-  Shoulty allows usera to "hear" other users "shouts" as long as they are close enough to each other
+  Shouty allows users to "hear" other users "shouts" as long as they are close enough to each other.
 
-  Todo:
-    - only shout to people to a certain distance
+  To do:
+  - only shout to people within a certain distance
 
   Scenario: Listener is within range
     Given a person named Lucy
@@ -12,7 +12,8 @@ Feature: Hear shout
     Then Lucy hears Sean's message
 
   Scenario: Listener hears a different message
-    Given Lucy is located 15 metres from Sean
+    Given a person named Lucy
+    And a person named Sean
     When Sean shouts "free coffee!"
     Then Lucy hears Sean's message
 

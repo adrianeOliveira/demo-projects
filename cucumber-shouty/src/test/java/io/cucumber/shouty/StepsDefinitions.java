@@ -1,5 +1,7 @@
 package io.cucumber.shouty;
 
+import io.cucumber.java.Before;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -13,13 +15,11 @@ public class StepsDefinitions {
     private Person lucy;
 
     private String messageFromSean;
+    private Network network;
 
-    @Given("Lucy is located {int} metres from Sean")
-    public void lucyIsLocatedMetresFromSean(int distance) {
-        final Network network = new Network();
-        sean = new Person(network);
-        lucy = new Person(network);
-        lucy.moveTo(distance);
+    @Before
+    public void createNetwork() {
+        network = new Network();
     }
 
     @When("Sean shouts {string}")
@@ -31,5 +31,15 @@ public class StepsDefinitions {
     @Then("Lucy hears Sean's message")
     public void lucyHearsSeanSMessage() {
         assertEquals(Arrays.asList(messageFromSean), lucy.getMessagesHeard());
+    }
+
+    @Given("a person named Lucy")
+    public void aPersonNamedLucy() {
+        lucy = new Person(network);
+    }
+
+    @And("a person named Sean")
+    public void aPersonNamedSean() {
+        sean = new Person(network);
     }
 }
