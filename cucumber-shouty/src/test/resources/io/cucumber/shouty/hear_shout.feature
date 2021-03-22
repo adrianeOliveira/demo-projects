@@ -5,20 +5,22 @@ Feature: Hear shout
   To do:
   - only shout to people within a certain distance
 
-  Scenario: Listener is within range
+  Background:
     Given a person named Lucy
     And a person named Sean
-    When Sean shouts "free bagels at Sean's"
-    Then Lucy hears Sean's message
 
-  Scenario: Listener hears a different message
-    Given a person named Lucy
-    And a person named Sean
-    When Sean shouts "free coffee!"
-    Then Lucy hears Sean's message
+  Rule: Shouts can be heard by other users
 
-    Rule: Shoults should only be heard if listener is within range
+    Scenario: Listener hears a message
+      When Sean shouts "free bagels at Sean's"
+      Then Lucy should hear Sean's message
 
-        Scenario: Listener is within range
+    Scenario: Listener hears a different message
+      When Sean shouts "Free coffee!"
+      Then Lucy should hear Sean's message
 
-        Scenario: Listener is out of range
+  Rule: Shouts should only be heard if listener is within range
+
+    Scenario: Listener is within range
+
+    Scenario: Listener is out of range
