@@ -7,7 +7,7 @@ class Order(
     var totalPrice = 0.0
     private set
 
-    fun addItem(productId: Int, price: Double, quantity: Int) {
+    fun addProduct(productId: Int, price: Double, quantity: Int) {
         items.add(Item(productId, price, quantity))
         totalPrice += (price * quantity)
     }

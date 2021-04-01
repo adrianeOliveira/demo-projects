@@ -12,7 +12,7 @@ class OrderServiceImpl(
     override fun openOrder(newOrderRequest: NewOrderRequest) {
         val newOrder = Order(Status.OPEN)
 
-        newOrder.addItem(
+        newOrder.addProduct(
             productId = newOrderRequest.productId,
             quantity = newOrderRequest.quantity,
             price = newOrderRequest.unitPrice
