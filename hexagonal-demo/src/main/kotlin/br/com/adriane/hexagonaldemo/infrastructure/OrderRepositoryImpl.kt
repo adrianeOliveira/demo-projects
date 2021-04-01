@@ -1,24 +1,15 @@
 package br.com.adriane.hexagonaldemo.infrastructure
 
 import br.com.adriane.hexagonaldemo.domain.Order
-import br.com.adriane.hexagonaldemo.domain.repository.OrderRepository
-import br.com.adriane.hexagonaldemo.infrastructure.entities.ItemEntity
-import br.com.adriane.hexagonaldemo.infrastructure.entities.OrderEntity
+import br.com.adriane.hexagonaldemo.domain.OrderRepository
 
 class OrderRepositoryImpl(
+    private val mapper: OrderMapper,
     private val orderRepository: JpaOrderRepository
-) : OrderRepository{
+) : OrderRepository {
 
     override fun saveNewOrder(order: Order) {
-        val orderEntity = OrderEntity(
-            totalPrice = order.totalPrice,
-            status = order.status.name,
-            items = order.items.map { ItemEntity(
-                productId = it.productId,
-                unitPrice = it.unitPrice,
-                quantity = it.quantity
-            )  }.toMutableList()
-        )
+        val orderEntity = mapper.fromDomainToEntity(order)
 
         orderRepository.save(orderEntity)
     }
