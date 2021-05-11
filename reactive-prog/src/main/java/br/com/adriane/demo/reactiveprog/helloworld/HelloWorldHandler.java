@@ -1,4 +1,4 @@
-package br.com.adriane.demo.reactiveprog;
+package br.com.adriane.demo.reactiveprog.helloworld;
 
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;

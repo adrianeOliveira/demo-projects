@@ -1,4 +1,4 @@
-package br.com.adriane.demo.reactiveprog;
+package br.com.adriane.demo.reactiveprog.helloworld;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
