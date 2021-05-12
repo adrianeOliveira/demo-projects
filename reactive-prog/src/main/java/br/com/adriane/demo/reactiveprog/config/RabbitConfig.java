@@ -13,6 +13,8 @@ import br.com.adriane.demo.reactiveprog.Receiver;
 
 @Configuration
 public class RabbitConfig {
+    private static final String DEFAULT_QUEUE = "queue.contact";
+
     @Bean
     public TopicExchange topic() {
         return new TopicExchange("topic.contact");
@@ -30,7 +32,7 @@ public class RabbitConfig {
 
     @Bean
     Queue queue() {
-        return new Queue("queue.contact", false);
+        return new Queue(DEFAULT_QUEUE, true);
     }
 
     @Bean
@@ -38,7 +40,7 @@ public class RabbitConfig {
         MessageListenerAdapter listenerAdapter) {
         SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
-        container.setQueueNames("queue.contact");
+        container.setQueueNames(DEFAULT_QUEUE);
         container.setMessageListener(listenerAdapter);
         return container;
     }
