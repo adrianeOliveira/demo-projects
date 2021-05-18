@@ -1,4 +1,4 @@
-package br.com.adriane.demo.reactiveprog;
+package br.com.adriane.demo.reactiveprog.model;
 
 import lombok.Data;
 

@@ -9,7 +9,7 @@ import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import br.com.adriane.demo.reactiveprog.Receiver;
+import br.com.adriane.demo.reactiveprog.consumers.Receiver;
 
 @Configuration
 public class RabbitConfig {
