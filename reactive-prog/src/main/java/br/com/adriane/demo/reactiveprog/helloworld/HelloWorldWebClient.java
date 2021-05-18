@@ -12,7 +12,8 @@ public class HelloWorldWebClient {
     private final Mono<ClientResponse> result = client.get()
             .uri("/hello")
             .accept(MediaType.APPLICATION_JSON)
-            .exchange();
+            .retrieve()
+            .bodyToMono(ClientResponse.class);
 
     public String getResult() {
         return ">> result = " + result.flatMap(res -> res.bodyToMono(String.class)).block();
