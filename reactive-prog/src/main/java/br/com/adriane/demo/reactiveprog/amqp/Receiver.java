@@ -1,6 +1,5 @@
-package br.com.adriane.demo.reactiveprog.amqp.consumers;
+package br.com.adriane.demo.reactiveprog.amqp;
 
-import br.com.adriane.demo.reactiveprog.amqp.model.ContactMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;

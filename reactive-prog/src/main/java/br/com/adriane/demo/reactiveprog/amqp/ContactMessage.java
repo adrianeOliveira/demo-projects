@@ -1,4 +1,4 @@
-package br.com.adriane.demo.reactiveprog.amqp.model;
+package br.com.adriane.demo.reactiveprog.amqp;
 
 import lombok.Data;
 
