@@ -1,0 +1,2 @@
+#Webflux Error List
+POC seguindo as guidelines de apirest da microsoft para retornar um lista com todos os erros para cada item de uma lista: https://github.com/microsoft/api-guidelines/blob/vNext/azure/Guidelines.md
