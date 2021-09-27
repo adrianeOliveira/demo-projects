@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class ErrorResponse {
-    private ErrorDetail error;
+    private Error error;
 }
