@@ -4,9 +4,9 @@ spring:
     url: r2dbc:h2:mem:///contact_db?options=MODE=PostgreSQL;
     name: sa
     password:
+
 logging:
   level:
     org:
       springframework:
-        data:
           r2dbc: DEBUG
