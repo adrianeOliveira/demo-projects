@@ -12,13 +12,13 @@ import rodrigues.adriane.demo.webfluxerrorlist.request.CreateContactRequest;
 
 @SpringBootTest
 @AutoConfigureWebTestClient
-class WebfluxErrorListApplicationTests {
+class WebFluxErrorListApplicationTests {
 
 	@Autowired
 	private WebTestClient webTestClient;
 
 	@Test
-	void contextLoads() {
+	void givenANewContact_WhenCreaeteNewContact_ThenReturnNoContent() {
 		CreateContactRequest request = new CreateContactRequest();
 
 		request.setName("Adriane Rodrigues");
@@ -26,10 +26,23 @@ class WebfluxErrorListApplicationTests {
 
 		webTestClient.post()
 				.uri("/api")
-				.accept(MediaType.APPLICATION_JSON)
-				.bodyValue(request)
+					.accept(MediaType.APPLICATION_JSON)
+					.bodyValue(request)
 				.exchange()
-				.expectStatus().isNoContent();
+				.expectStatus()
+					.isNoContent();
+
+	}
+
+	@Test
+	void givenAContactId_WhenSearchForContact_ThenReturnTheContact() {
+		webTestClient.get()
+				.uri("/api/1")
+				.exchange()
+				.expectStatus()
+					.isOk()
+				.expectBody()
+					.json("{\"id\": 1,\"name\": \"Jessica\",\"email\": \"jessica@email.com\"}");
 
 	}
 

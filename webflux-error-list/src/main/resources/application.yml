@@ -1,7 +1,7 @@
 
 spring:
   r2dbc:
-    url: r2dbc:h2:mem:///contact_db?options=MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE
+    url: r2dbc:h2:mem:///contact_db?options=MODE=PostgreSQL;
     name: sa
     password:
 logging:
