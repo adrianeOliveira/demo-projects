@@ -53,7 +53,7 @@ class ReactiveCustomRepositoryApplicationTests {
 		userCustom.setName("Adriane");
 
 		StepVerifier.create(userRepository.findAllUserCustom().log())
-				.expectNext(Collections.singletonList(userCustom))
+				.expectNext(userCustom)
 				.verifyComplete();
 	}
 
@@ -64,7 +64,7 @@ class ReactiveCustomRepositoryApplicationTests {
 		userCustom.setName("Adriane");
 
 		StepVerifier.create(userRepository.findAllUserCustom().log())
-				.expectNext(Collections.singletonList(userCustom))
+				.expectNext(userCustom)
 				.verifyComplete();
 	}
 

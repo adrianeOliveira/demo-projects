@@ -5,6 +5,7 @@ import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.stereotype.Repository;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Repository
@@ -14,8 +15,8 @@ public interface UserRepository  extends ReactiveCrudRepository<User, Integer> {
     Mono<UserCustom> findUserCustom(@Param("id") Integer id);
 
     @Query("select id, name from users")
-    Mono<List<UserCustom>> findAllUserCustom();
+    Mono<UserCustom> findAllUserCustom();
 
     @Query("select * from users")
-    Mono<List<User>> findAllUsers();
+    Flux<User> findAllUsers();
 }
