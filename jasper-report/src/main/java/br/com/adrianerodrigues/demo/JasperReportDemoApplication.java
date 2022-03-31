@@ -2,6 +2,8 @@ package br.com.adrianerodrigues.demo;
 
 import java.io.InputStream;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sql.DataSource;
@@ -31,7 +33,11 @@ public class JasperReportDemoApplication {
         JasperReport jasperReport = JasperCompileManager.compileReport(employeeReportStream);
         JRSaver.saveObject(jasperReport, "employeeReport.jasper");
         DataSource dataSource = ctx.getBean(DataSource.class);
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, dataSource.getConnection());
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("title", "Employee Report");
+        parameters.put("minSalary", 15000.0);
+        parameters.put("condition", " LAST_NAME ='Smith' ORDER BY FIRST_NAME");
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource.getConnection());
 
         exportToPdf(jasperPrint, "employeeReport.pdf", "baeldung");
     }
