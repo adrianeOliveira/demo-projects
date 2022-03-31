@@ -29,9 +29,14 @@ public class JasperReportDemoApplication {
         ctx.register(JasperReportsConfig.class);
         ctx.refresh();
 
-        InputStream employeeReportStream = JasperReportDemoApplication.class.getResourceAsStream("/employeeReport.jrxml");
+        InputStream employeeReportStream= JasperReportDemoApplication.class.getResourceAsStream("/employeeReport.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(employeeReportStream);
         JRSaver.saveObject(jasperReport, "employeeReport.jasper");
+
+        InputStream emailReportStream = JasperReportDemoApplication.class.getResourceAsStream("/employeeEmailReport.jrxml");
+        JRSaver.saveObject(JasperCompileManager.compileReport(emailReportStream), "employeeEmailReport.jasper");
+
+
         DataSource dataSource = ctx.getBean(DataSource.class);
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("title", "Employee Report");
@@ -62,7 +67,7 @@ public class JasperReportDemoApplication {
         try {
             exporter.exportReport();
         } catch (JRException ex) {
-            Logger.getLogger(SimpleReportFiller.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(JasperReportDemoApplication.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
