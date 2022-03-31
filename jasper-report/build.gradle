@@ -1,0 +1,25 @@
+plugins {
+    id 'org.springframework.boot' version '2.6.5'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+}
+
+group 'br.com.adrianerodrigues.demo'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven { url "https://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts/" }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'net.sf.jasperreports:jasperreports:6.19.1'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    /*testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'*/
+}
+
+test {
+    useJUnitPlatform()
+}
