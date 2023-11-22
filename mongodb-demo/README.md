@@ -20,7 +20,7 @@ sudo docker run --name mongodb -d -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=r
 
 Criar usuário no Mongo para conectar aplicação com a base de dados usando Mongo Compass:
 ```shell
-db.createUser({user:"mongoUser",pwd:"mongoUser@",roles:[{role:"readWrite",db:"mongodb-demo"}]})
+db.createUser({user:"mongoUser",pwd:"mongoUser",roles:[{role:"readWrite",db:"mongodb-demo"}]})
 ```
 Para conectar a aplicação com o banco não é permitido utilizar o usuário root.
 
