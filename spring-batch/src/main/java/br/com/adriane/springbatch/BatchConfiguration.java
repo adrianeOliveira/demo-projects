@@ -2,6 +2,9 @@ package br.com.adriane.springbatch;
 
 import br.com.adriane.springbatch.event.PersonEvent;
 import lombok.RequiredArgsConstructor;
+import org.apache.kafka.clients.admin.AdminClientConfig;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -41,12 +44,10 @@ public class BatchConfiguration {
 
     @Bean
     public KafkaItemReader<String, PersonEvent> personItemReader( KafkaProperties kafkaProperties) {
-        Properties props = new Properties();
-        props.putAll(kafkaProperties.getProperties());
 
         return new KafkaItemReaderBuilder<String, PersonEvent>()
                 .name("kafkaItemReader")
-                .consumerProperties(props)
+                .consumerProperties(buildKafkaProperties())
                 .partitions(0)
                 .topic("person-topic")
                 .build();
@@ -69,6 +70,15 @@ public class BatchConfiguration {
                 .reader(personItemReader)
                 .writer(writer)
                 .build();
+    }
+
+    private Properties buildKafkaProperties() {
+        Properties properties = new Properties();
+        properties.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:29092");
+        properties.put(ConsumerConfig.GROUP_ID_CONFIG, "person-group");
+        properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        return properties;
     }
 
 }
