@@ -1,70 +1,74 @@
 package br.com.adriane.springbatch;
 
-import javax.sql.DataSource;
+import br.com.adriane.springbatch.event.PersonEvent;
+import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
-import org.springframework.batch.item.database.JdbcBatchItemWriter;
-import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilder;
-import org.springframework.batch.item.file.FlatFileItemReader;
-import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
+import org.springframework.batch.item.data.MongoItemWriter;
+import org.springframework.batch.item.data.builder.MongoItemWriterBuilder;
+import org.springframework.batch.item.kafka.KafkaItemReader;
+import org.springframework.batch.item.kafka.builder.KafkaItemReaderBuilder;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.kafka.annotation.EnableKafka;
+import org.springframework.transaction.PlatformTransactionManager;
+
+import java.util.Properties;
 
 @Configuration
+@EnableKafka
+@EnableBatchProcessing
+@RequiredArgsConstructor
 public class BatchConfiguration {
 
+    private final JobRepository jobRepository;
+
+    private final PlatformTransactionManager transactionManager;
+
     @Bean
-    public FlatFileItemReader<Person> reader() {
-        return new FlatFileItemReaderBuilder<Person>()
-            .name("personItemReader")
-            .resource(new ClassPathResource("data.csv"))
-            .delimited()
-            .names("firstName", "lastName")
-            .targetType(Person.class)
-            .build();
+    public Job job(final @Qualifier("personStep") Step step) {
+        return new JobBuilder("job", jobRepository)
+                .start(step)
+                .build();
     }
 
     @Bean
-    public PersonItemProcessor processor() {
-        return new PersonItemProcessor();
+    public KafkaItemReader<String, PersonEvent> personItemReader( KafkaProperties kafkaProperties) {
+        Properties props = new Properties();
+        props.putAll(kafkaProperties.getProperties());
+
+        return new KafkaItemReaderBuilder<String, PersonEvent>()
+                .name("kafkaItemReader")
+                .consumerProperties(props)
+                .partitions(0)
+                .topic("person-topic")
+                .build();
     }
 
     @Bean
-    public JobCompletionNotificationListener listener(JdbcTemplate jdbcTemplate) {
-        return new JobCompletionNotificationListener(jdbcTemplate);
+    public MongoItemWriter<PersonEvent> writer(MongoOperations template) {
+        return new MongoItemWriterBuilder<PersonEvent>()
+                .collection("spring-batch-kafka")
+                .template(template)
+                .build();
     }
 
     @Bean
-    public JdbcBatchItemWriter<Person> writer(DataSource dataSource) {
-        return new JdbcBatchItemWriterBuilder<Person>()
-            .sql("INSERT INTO people (first_name, last_name) VALUES (:firstName, :lastName)")
-            .dataSource(dataSource)
-            .beanMapped()
-            .build();
+    @Qualifier("personStep")
+    public Step step(KafkaItemReader<String, PersonEvent> personItemReader, MongoItemWriter writer) {
+        return new StepBuilder("step", jobRepository)
+                .chunk(10, transactionManager)
+                .repository(jobRepository)
+                .reader(personItemReader)
+                .writer(writer)
+                .build();
     }
 
-    @Bean
-    public Job importUserJob(JobRepository jobRepository,Step step1, JobCompletionNotificationListener listener) {
-        return new JobBuilder("importUserJob", jobRepository)
-            .listener(listener)
-            .start(step1)
-            .build();
-    }
-
-    @Bean
-    public Step step1(JobRepository jobRepository, DataSourceTransactionManager transactionManager,
-        FlatFileItemReader<Person> reader, PersonItemProcessor processor, JdbcBatchItemWriter<Person> writer) {
-        return new StepBuilder("step1", jobRepository)
-            .<Person, Person> chunk(3, transactionManager)
-            .reader(reader)
-            .processor(processor)
-            .writer(writer)
-            .build();
-    }
 }

@@ -1,0 +1,19 @@
+spring:
+  kafka:
+    bootstrap-servers: "localhost:29092"
+    template.default-topic: "person-topic"
+    consumer:
+      group-id: "person-group"
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+    properties:
+      spring.json.trusted.packages: \*
+  datasource:
+    url: "jdbc:postgresql://localhost:5432/job-batch"
+    username: "postgresUser"
+    password: "postgresUser"
+  batch:
+    job:
+      enabled: "true"
+    jdbc:
+      initialize-schema: "always"

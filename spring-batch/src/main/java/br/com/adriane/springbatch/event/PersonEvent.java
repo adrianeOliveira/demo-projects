@@ -1,17 +1,17 @@
-package br.com.adriane.springbatch;
+package br.com.adriane.springbatch.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.io.Serializable;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Document("person")
-public class Person {
+public class PersonEvent  implements Serializable {
 
     private String id;
     private String name;
