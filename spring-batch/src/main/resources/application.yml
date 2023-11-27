@@ -1,9 +1,4 @@
 spring:
-  kafka:
-    bootstrap-servers: localhost:29092"
-    template.default-topic: person-topic
-    consumer:
-      group-id: person-group
   data:
     mongodb.uri: mongodb://mongoUser:mongoUser@localhost:27017/job-batch
   datasource:
