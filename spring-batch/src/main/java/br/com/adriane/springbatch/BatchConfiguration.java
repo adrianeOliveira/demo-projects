@@ -1,6 +1,7 @@
 package br.com.adriane.springbatch;
 
 import br.com.adriane.springbatch.event.PersonEvent;
+import java.util.Properties;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -8,22 +9,18 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
-import org.springframework.batch.core.job.builder.JobBuilder;
+import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.repository.JobRepository;
-import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.data.MongoItemWriter;
 import org.springframework.batch.item.data.builder.MongoItemWriterBuilder;
 import org.springframework.batch.item.kafka.KafkaItemReader;
 import org.springframework.batch.item.kafka.builder.KafkaItemReaderBuilder;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.transaction.PlatformTransactionManager;
-
-import java.util.Properties;
 
 @Configuration
 @EnableKafka
@@ -31,21 +28,25 @@ import java.util.Properties;
 @RequiredArgsConstructor
 public class BatchConfiguration {
 
+    private final JobBuilderFactory jobBuilderFactory;
+
+    private final StepBuilderFactory stepBuilderFactory;
+
     private final JobRepository jobRepository;
 
     private final PlatformTransactionManager transactionManager;
 
     @Bean
-    public Job job(final @Qualifier("personStep") Step step) {
-        return new JobBuilder("job", jobRepository)
-                .start(step)
-                .build();
+    public Job job(Step step) {
+        return jobBuilderFactory.get("job")
+            .start(step)
+            .build();
     }
 
     @Bean
-    public KafkaItemReader<String, PersonEvent> personItemReader( KafkaProperties kafkaProperties) {
+    public KafkaItemReader<String, String> personItemReader() {
 
-        return new KafkaItemReaderBuilder<String, PersonEvent>()
+        return new KafkaItemReaderBuilder<String, String>()
                 .name("kafkaItemReader")
                 .consumerProperties(buildKafkaProperties())
                 .partitions(0)
@@ -62,14 +63,12 @@ public class BatchConfiguration {
     }
 
     @Bean
-    @Qualifier("personStep")
-    public Step step(KafkaItemReader<String, PersonEvent> personItemReader, MongoItemWriter writer) {
-        return new StepBuilder("step", jobRepository)
-                .chunk(10, transactionManager)
-                .repository(jobRepository)
-                .reader(personItemReader)
-                .writer(writer)
-                .build();
+    public Step step(KafkaItemReader<String, String> reader, MongoItemWriter<PersonEvent> writer) {
+        return stepBuilderFactory.get("step")
+            .<String, PersonEvent>chunk(10)
+            .reader(reader)
+            .writer(writer)
+            .build();
     }
 
     private Properties buildKafkaProperties() {

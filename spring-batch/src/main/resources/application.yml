@@ -11,7 +11,4 @@ spring:
       username: postgresUser
       password: postgresUser
   batch:
-    job:
-      enabled: true
-    jdbc:
-      initialize-schema: always
+    jdbc.initialize-schema: always
