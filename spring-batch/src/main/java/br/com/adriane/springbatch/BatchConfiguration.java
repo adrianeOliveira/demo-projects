@@ -56,7 +56,7 @@ public class BatchConfiguration {
     @Bean
     public MongoItemWriter<PersonEvent> writer(MongoOperations template) {
         return new MongoItemWriterBuilder<PersonEvent>()
-                .collection("spring-batch-kafka")
+                .collection("job-batch")
                 .template(template)
                 .build();
     }
