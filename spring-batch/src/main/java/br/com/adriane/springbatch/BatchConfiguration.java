@@ -1,9 +1,11 @@
 package br.com.adriane.springbatch;
 
+import br.com.adriane.springbatch.entities.Person;
 import br.com.adriane.springbatch.listener.StepStatisticsListener;
+import br.com.adriane.springbatch.processor.PersonProcessor;
 import br.com.adriane.springbatch.writer.CustomMongoItemWriter;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Properties;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.admin.AdminClientConfig;
@@ -15,7 +17,6 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
-import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.kafka.KafkaItemReader;
 import org.springframework.batch.item.kafka.builder.KafkaItemReaderBuilder;
 import org.springframework.context.annotation.Bean;
@@ -41,9 +42,9 @@ public class BatchConfiguration {
     }
 
     @Bean
-    public Step step(KafkaItemReader<String, String> reader, CustomMongoItemWriter writer, StepStatisticsListener listener, ItemProcessor<String, Person> processor) {
+    public Step step(KafkaItemReader<String, String> reader, CustomMongoItemWriter writer, StepStatisticsListener listener, PersonProcessor processor) {
         return stepBuilderFactory.get("step")
-            .<String, Person>chunk(10)
+            .<String, Person>chunk(3)
             .reader(reader)
             .processor(processor)
             .writer(writer)
@@ -54,13 +55,13 @@ public class BatchConfiguration {
 
     @Bean
     public KafkaItemReader<String, String> personItemReader() {
-
         return new KafkaItemReaderBuilder<String, String>()
-                .name("kafkaItemReader")
-                .consumerProperties(buildKafkaProperties())
-                .partitions(Arrays.asList(0))
-                .topic("person-topic")
-                .build();
+            .name("kafkaItemReader")
+            .consumerProperties(buildKafkaProperties())
+            .partitionOffsets(new HashMap<>())
+            .partitions(0,1,2)
+            .topic("person-topic")
+            .build();
     }
 
     @Bean
@@ -76,7 +77,6 @@ public class BatchConfiguration {
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true);
         properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-        properties.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG, "read_uncommitted");
         return properties;
     }
 

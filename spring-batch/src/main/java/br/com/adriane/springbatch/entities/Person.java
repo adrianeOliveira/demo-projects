@@ -1,4 +1,4 @@
-package br.com.adriane.springbatch;
+package br.com.adriane.springbatch.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

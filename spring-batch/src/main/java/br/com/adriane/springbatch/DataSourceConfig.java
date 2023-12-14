@@ -7,7 +7,4 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @Configuration
 @EnableJpaRepositories
 @EnableMongoRepositories
-public class DataSourceConfig {
-
-
-}
+public class DataSourceConfig {}

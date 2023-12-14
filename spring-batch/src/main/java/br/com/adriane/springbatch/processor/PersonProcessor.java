@@ -1,6 +1,6 @@
 package br.com.adriane.springbatch.processor;
 
-import br.com.adriane.springbatch.Person;
+import br.com.adriane.springbatch.entities.Person;
 import br.com.adriane.springbatch.event.PersonEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;

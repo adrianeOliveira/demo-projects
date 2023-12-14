@@ -1,6 +1,6 @@
 package br.com.adriane.springbatch.writer;
 
-import br.com.adriane.springbatch.Person;
+import br.com.adriane.springbatch.entities.Person;
 import br.com.adriane.springbatch.repositories.PersonRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
