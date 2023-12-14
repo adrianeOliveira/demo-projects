@@ -7,6 +7,7 @@ import br.com.adriane.springbatch.writer.CustomMongoItemWriter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
 import java.util.Properties;
+import java.util.concurrent.Future;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -17,10 +18,14 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.integration.async.AsyncItemProcessor;
+import org.springframework.batch.integration.async.AsyncItemWriter;
 import org.springframework.batch.item.kafka.KafkaItemReader;
 import org.springframework.batch.item.kafka.builder.KafkaItemReaderBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.kafka.annotation.EnableKafka;
 
 @Configuration
@@ -37,14 +42,15 @@ public class BatchConfiguration {
     public Job job(Step step) {
         return jobBuilderFactory.get("job")
             .incrementer(new RunIdIncrementer())
-            .start(step)
+            .start(step).on("*")
+            .end().end()
             .build();
     }
 
     @Bean
-    public Step step(KafkaItemReader<String, String> reader, CustomMongoItemWriter writer, StepStatisticsListener listener, PersonProcessor processor) {
+    public Step step(TaskExecutor taskExecutor, KafkaItemReader<String, String> reader, AsyncItemWriter<Person> writer, StepStatisticsListener listener, AsyncItemProcessor<String, Person> processor) {
         return stepBuilderFactory.get("step")
-            .<String, Person>chunk(3)
+            .<String, Future<Person>>chunk(6)
             .reader(reader)
             .processor(processor)
             .writer(writer)
@@ -54,7 +60,34 @@ public class BatchConfiguration {
     }
 
     @Bean
-    public KafkaItemReader<String, String> personItemReader() {
+    public TaskExecutor taskExecutor() {
+        /*ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+        taskExecutor.setMaxPoolSize(3);
+        taskExecutor.setCorePoolSize(3);
+        taskExecutor.setQueueCapacity(3);
+        taskExecutor.afterPropertiesSet()*/
+        SimpleAsyncTaskExecutor taskExecutor = new SimpleAsyncTaskExecutor("asyncExecutor_");
+        taskExecutor.setConcurrencyLimit(3);
+        return taskExecutor;
+    }
+
+    @Bean
+    public AsyncItemProcessor<String, Person> processor(TaskExecutor taskExecutor, PersonProcessor itemProcessor) {
+        AsyncItemProcessor<String, Person> asyncItemProcessor = new AsyncItemProcessor();
+        asyncItemProcessor.setTaskExecutor(taskExecutor);
+        asyncItemProcessor.setDelegate(itemProcessor);
+        return asyncItemProcessor;
+    }
+
+    @Bean
+    public AsyncItemWriter<Person> writer(CustomMongoItemWriter itemWriter) {
+        AsyncItemWriter<Person>  asyncItemWriter = new AsyncItemWriter();
+        asyncItemWriter.setDelegate(itemWriter);
+        return asyncItemWriter;
+    }
+
+    @Bean
+    public KafkaItemReader<String, String> kafkaItemReader() {
         return new KafkaItemReaderBuilder<String, String>()
             .name("kafkaItemReader")
             .consumerProperties(buildKafkaProperties())

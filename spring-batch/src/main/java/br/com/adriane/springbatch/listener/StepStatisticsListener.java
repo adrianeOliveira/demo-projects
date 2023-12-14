@@ -15,12 +15,13 @@ public class StepStatisticsListener implements StepExecutionListener {
         log.info("Write count: {}", stepExecution.getWriteCount());
         log.info("Skip count: {}", stepExecution.getSkipCount());
         log.info("Commit count: {}", stepExecution.getCommitCount());
-        return ExitStatus.COMPLETED;
+        return stepExecution.getExitStatus();
     }
 
     @Override
     public void beforeStep(StepExecution stepExecution) {
         log.info("Initializing Step {}", stepExecution.getStepName());
     }
+
 
 }
